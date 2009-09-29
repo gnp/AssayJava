@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.exoprax.assay.Assay;
 import org.exoprax.assay.AssayOutput;
 
@@ -16,22 +17,9 @@ import org.exoprax.assay.AssayOutput;
  */
 public class ConsoleOutput implements AssayOutput {
 
-    private Assay assay;
-
-    public ConsoleOutput() {
-        super();
-    }
-
-    /**
-     * @return the assay
-     */
-    public Assay getAssay() {
-        return this.assay;
-    }
-
     private static class StringComparator implements Comparator<String> {
 
-        public int compare(String o1, String o2) {
+        public int compare(final String o1, final String o2) {
             if ((o1 == null) && (o2 == null)) {
                 return 0;
             }
@@ -52,11 +40,36 @@ public class ConsoleOutput implements AssayOutput {
                 return temp;
             }
         }
-        
+
     }
-    
+
+    private Assay assay;
+
+    private int valueWidth = 30;
+
+    private int showValuesLimit = 20;
+
     private static StringComparator stringComparator = new StringComparator();
-    
+
+    public ConsoleOutput() {
+        super();
+    }
+
+    /**
+     * @return the assay
+     */
+    public Assay getAssay() {
+        return this.assay;
+    }
+
+    public int getShowValuesLimit() {
+        return this.showValuesLimit;
+    }
+
+    public int getValueWidth() {
+        return this.valueWidth;
+    }
+
     public void run() {
         final Map<String, String> columnTypes = this.assay.getColumnTypes();
         final Map<String, Map<String, Map<String, Long>>> tableAssay = this.assay.getTableAssay();
@@ -76,9 +89,9 @@ public class ConsoleOutput implements AssayOutput {
 
             System.out.printf("%s [ specified type %s ]:\n\n", columnName, columnTypeName);
 
-            System.out.printf("  %-30s  %-32s  %8s  %8s\n", "PATTERN", "VALUE", "DISTINCT", "OCCURS");
-            System.out.printf("  %-30s  %-32s  %8s  %8s\n", "------------------------------", "--------------------------------",
-                    "--------", "--------");
+            System.out.printf("  %-30s  %s  %8s  %8s\n", "PATTERN", StringUtils.rightPad("VALUE", valueWidth), "DISTINCT", "OCCURS");
+            System.out.printf("  %-30s  %s  %8s  %8s\n", "------------------------------",
+                    StringUtils.rightPad("", valueWidth, '-'), "--------", "--------");
 
             final List<String> typeSpecList = new ArrayList<String>(columnAssay.keySet());
             Collections.sort(typeSpecList, stringComparator);
@@ -88,7 +101,7 @@ public class ConsoleOutput implements AssayOutput {
 
                 final List<String> valueList = new ArrayList<String>(valueAssay.keySet());
 
-                if (valueList.size() <= 20) {
+                if (valueList.size() <= showValuesLimit) {
                     Collections.sort(valueList, stringComparator);
 
                     for (final String actualValue : valueList) {
@@ -96,14 +109,14 @@ public class ConsoleOutput implements AssayOutput {
 
                         distinctCount++;
 
-                        Long valueCount = valueAssay.get(actualValue);
-                        
+                        final Long valueCount = valueAssay.get(actualValue);
+
                         occursCount += valueCount.longValue();
 
                         String displayValue = escapedValue;
-                        
-                        if ((displayValue != null) && (displayValue.length() > 30)) {
-                            displayValue = displayValue.substring(0, 27) + "...";
+
+                        if ((displayValue != null) && (displayValue.length() > valueWidth - 2)) {
+                            displayValue = displayValue.substring(0, valueWidth - 5) + "...";
                         }
 
                         if (displayValue == null) {
@@ -112,7 +125,7 @@ public class ConsoleOutput implements AssayOutput {
                             displayValue = "\"" + displayValue + "\"";
                         }
 
-                        System.out.printf("  %-30s  %-32s  %8d  %8d\n", typeSpec, displayValue, 1, valueCount);
+                        System.out.printf("  %-30s  %s  %,8d  %,8d\n", typeSpec, StringUtils.rightPad(displayValue, valueWidth), 1, valueCount);
                     }
                 } else {
                     long typeSpecCount = 0;
@@ -126,7 +139,7 @@ public class ConsoleOutput implements AssayOutput {
                         typeSpecCount += valueCount.longValue();
                     }
 
-                    System.out.printf("  %-30s  %-32s  %8d  %8d\n", typeSpec, "*", valueList.size(), typeSpecCount);
+                    System.out.printf("  %-30s  %s  %,8d  %,8d\n", typeSpec, StringUtils.rightPad("*", valueWidth), valueList.size(), typeSpecCount);
                 }
             }
 
@@ -140,9 +153,9 @@ public class ConsoleOutput implements AssayOutput {
                 note = null;
             }
 
-            System.out.printf("  %-30s  %-32s  %8s  %8s\n", "------------------------------", "--------------------------------",
-                    "--------", "--------");
-            System.out.printf("  %-30s  %-32s  %8d  %8d\n", "", "", distinctCount, occursCount);
+            System.out.printf("  %-30s  %s  %8s  %8s\n", "------------------------------",
+                    StringUtils.rightPad("", valueWidth, '-'), "--------", "--------");
+            System.out.printf("  %-30s  %s  %,8d  %,8d\n", "", StringUtils.rightPad("", valueWidth), distinctCount, occursCount);
 
             if (note != null) {
                 System.out.println(note);
@@ -159,6 +172,14 @@ public class ConsoleOutput implements AssayOutput {
      */
     public void setAssay(final Assay assay) {
         this.assay = assay;
+    }
+
+    public void setShowValuesLimit(final int showValuesLimit) {
+        this.showValuesLimit = showValuesLimit;
+    }
+
+    public void setValueWidth(final int valueWidth) {
+        this.valueWidth = valueWidth;
     }
 
 }
