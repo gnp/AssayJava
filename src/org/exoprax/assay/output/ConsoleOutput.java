@@ -2,9 +2,10 @@ package org.exoprax.assay.output;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-
+import org.apache.commons.lang.StringEscapeUtils;
 import org.exoprax.assay.Assay;
 import org.exoprax.assay.AssayOutput;
 
@@ -28,6 +29,34 @@ public class ConsoleOutput implements AssayOutput {
         return this.assay;
     }
 
+    private static class StringComparator implements Comparator<String> {
+
+        public int compare(String o1, String o2) {
+            if ((o1 == null) && (o2 == null)) {
+                return 0;
+            }
+
+            if (o1 == null) {
+                return -1;
+            }
+
+            if (o2 == null) {
+                return 1;
+            }
+
+            final int temp = o1.compareToIgnoreCase(o2);
+
+            if (temp == 0) {
+                return o1.compareTo(o2);
+            } else {
+                return temp;
+            }
+        }
+        
+    }
+    
+    private static StringComparator stringComparator = new StringComparator();
+    
     public void run() {
         final Map<String, String> columnTypes = this.assay.getColumnTypes();
         final Map<String, Map<String, Map<String, Long>>> tableAssay = this.assay.getTableAssay();
@@ -36,7 +65,7 @@ public class ConsoleOutput implements AssayOutput {
         System.out.println();
 
         final List<String> columnList = new ArrayList<String>(tableAssay.keySet());
-        Collections.sort(columnList);
+        Collections.sort(columnList, stringComparator);
 
         for (final String columnName : columnList) {
             long distinctCount = 0;
@@ -52,7 +81,7 @@ public class ConsoleOutput implements AssayOutput {
                     "--------", "--------");
 
             final List<String> typeSpecList = new ArrayList<String>(columnAssay.keySet());
-            Collections.sort(typeSpecList);
+            Collections.sort(typeSpecList, stringComparator);
 
             for (final String typeSpec : typeSpecList) {
                 final Map<String, Long> valueAssay = columnAssay.get(typeSpec);
@@ -60,30 +89,30 @@ public class ConsoleOutput implements AssayOutput {
                 final List<String> valueList = new ArrayList<String>(valueAssay.keySet());
 
                 if (valueList.size() <= 20) {
-                    Collections.sort(valueList);
+                    Collections.sort(valueList, stringComparator);
 
                     for (final String actualValue : valueList) {
-                        String value = actualValue.replaceAll("\\n", "\\n");
-                        value = value.replaceAll("\\r", "\\r");
-                        value = value.replaceAll("\\t", "\\t");
+                        final String escapedValue = StringEscapeUtils.escapeJava(actualValue);
 
                         distinctCount++;
 
-                        final Long valueCount = valueAssay.get(value);
-
+                        Long valueCount = valueAssay.get(actualValue);
+                        
                         occursCount += valueCount.longValue();
 
-                        if ((value != null) && (value.length() > 30)) {
-                            value = value.substring(0, 27) + "...";
+                        String displayValue = escapedValue;
+                        
+                        if ((displayValue != null) && (displayValue.length() > 30)) {
+                            displayValue = displayValue.substring(0, 27) + "...";
                         }
 
-                        if (value == null) {
-                            value = "null";
+                        if (displayValue == null) {
+                            displayValue = "null";
                         } else {
-                            value = "\"" + value + "\"";
+                            displayValue = "\"" + displayValue + "\"";
                         }
 
-                        System.out.printf("  %-30s  %-32s  %8d  %8d\n", typeSpec, value, 1, valueCount);
+                        System.out.printf("  %-30s  %-32s  %8d  %8d\n", typeSpec, displayValue, 1, valueCount);
                     }
                 } else {
                     long typeSpecCount = 0;
