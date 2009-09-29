@@ -1,0 +1,25 @@
+<project name="AssayJava" default="dist">
+  <target name="init">
+    <mkdir dir="build/classes" />
+    <mkdir dir="dist" />
+  </target>
+
+  <path id="compile.classpath">
+    <fileset dir="lib">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+
+  <target name="compile" depends="init">
+    <javac srcdir="src" destdir="build/classes" classpathref="compile.classpath" />
+  </target>
+
+  <target name="dist" depends="compile">
+    <jar destfile="dist/assayjava-SNAPSHOT.jar" basedir="build/classes" />
+  </target>
+
+  <target name="clean">
+    <delete dir="build" />
+    <delete dir="dist" />
+  </target>
+</project>
