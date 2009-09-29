@@ -23,7 +23,15 @@ public class Assay {
     /**
      * TODO: Lots of other formats, including ones that aren't all numeric
      */
-    public final static Pattern datePattern = Pattern.compile("^\\s*([0-9]{4}-[0-9]{2}-[0-9]{2})\\s*$");
+    public final static Pattern datePattern1 = Pattern.compile("^\\s*([0-9]{4}-[0-9]{2}-[0-9]{2})\\s*$");
+    
+    public final static Pattern datePattern2 = Pattern.compile("^\\s*([0-9]{2}-[0-9]{2}-[0-9]{4})\\s*$");
+    
+    public final static Pattern datePattern3 = Pattern.compile("^\\s*([0-9]{4}/[0-9]{2}/[0-9]{2})\\s*$");
+    
+    public final static Pattern datePattern4 = Pattern.compile("^\\s*([0-9]{2}/[0-9]{2}/[0-9]{4})\\s*$");
+    
+    public final static Pattern datePattern5 = Pattern.compile("^\\s*([a-z]{3} [0-9]{2} [0-9]{4})\\s*$", Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
 
     /**
      * TODO: Lots of other formats, including ones that aren't all numeric (including time zones, too)
@@ -41,6 +49,10 @@ public class Assay {
 
     public final static Pattern telephone2Pattern = Pattern.compile("^\\s*(\\([0-9]{3}\\)[0-9]{3}-[0-9]{4})\\s*$");
 
+    public final static Pattern truePattern = Pattern.compile("^(true|t|yes|y)$", Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
+    
+    public final static Pattern falsePattern = Pattern.compile("^(false|f|no|n)$", Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
+    
     public final static Pattern smallStringPattern = Pattern.compile("^\\p{Print}{1,3}$");
 
     public final static Pattern fillPattern = Pattern.compile("^(.)\\1{2,}$");
@@ -87,20 +99,44 @@ public class Assay {
 
             return String.format("DECIMAL(%2d, %2d)", precision, scale);
         }
+        
+        final Matcher dateMatcher5 = datePattern5.matcher(value);
+
+        if (dateMatcher5.matches()) {
+            return "DATE('MMM dd yyyy')";
+        }
 
         final Matcher zonedMatcher = zonedPattern.matcher(value);
 
         if (zonedMatcher.matches()) {
-            final Matcher dateMatcher = datePattern.matcher(value);
+            final Matcher dateMatcher1 = datePattern1.matcher(value);
 
-            if (dateMatcher.matches()) {
-                return "DATE('9999-99-99')"; // TODO: Get the format right, once we accept more than one format
+            if (dateMatcher1.matches()) {
+                return "DATE('yyyy-??-??')";
+            }
+            
+            final Matcher dateMatcher2 = datePattern2.matcher(value);
+
+            if (dateMatcher2.matches()) {
+                return "DATE('??-??-yyyy')";
+            }
+            
+            final Matcher dateMatcher3 = datePattern3.matcher(value);
+
+            if (dateMatcher3.matches()) {
+                return "DATE('yyyy/??/??')";
+            }
+            
+            final Matcher dateMatcher4 = datePattern4.matcher(value);
+
+            if (dateMatcher4.matches()) {
+                return "DATE('??/??/yyyy')";
             }
 
             final Matcher timestampMatcher = timestampPattern.matcher(value);
 
             if (timestampMatcher.matches()) {
-                return "TIMESTAMP('9999-99-99 99:99:99.9')"; // TODO: Get the format right, once we accept more than one format
+                return "TIMESTAMP('yyyy-MM-dd hh:mm:ss.SSS')"; // TODO: Get the format right, once we accept more than one format
             }
 
             final Matcher ssnMatcher = ssnPattern.matcher(value);
@@ -140,6 +176,18 @@ public class Assay {
             return "TELEPHONE('(999)999-9999')";
         }
 
+        final Matcher trueMatcher = truePattern.matcher(value);
+        
+        if (trueMatcher.matches()) {
+            return "BOOLEAN:TRUE";
+        }
+
+        final Matcher falseMatcher = falsePattern.matcher(value);
+        
+        if (falseMatcher.matches()) {
+            return "BOOLEAN:FALSE";
+        }
+        
         final Matcher smallStringMatcher = smallStringPattern.matcher(value);
 
         if (smallStringMatcher.matches()) {
