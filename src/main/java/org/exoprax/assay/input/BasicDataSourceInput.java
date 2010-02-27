@@ -1,16 +1,4 @@
-package org.exoprax.assay.input;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import org.apache.commons.dbcp.BasicDataSource;
-import org.exoprax.assay.Assay;
-import org.exoprax.assay.AssayInput;
-
-/**
+/*
  * Copyright 2006-2010 Gregor N. Purdy, Sr.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +14,19 @@ import org.exoprax.assay.AssayInput;
  * limitations under the License.
  *
  */
+
+package org.exoprax.assay.input;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import org.apache.commons.dbcp.BasicDataSource;
+import org.exoprax.assay.Assay;
+import org.exoprax.assay.AssayInput;
+
 public class BasicDataSourceInput implements AssayInput {
 
     public static String formatTypeString(final String columnType, final int precision, final int scale) {

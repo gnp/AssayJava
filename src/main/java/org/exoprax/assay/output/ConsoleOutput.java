@@ -1,16 +1,4 @@
-package org.exoprax.assay.output;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import org.apache.commons.lang.StringEscapeUtilsPatched;
-import org.apache.commons.lang.StringUtils;
-import org.exoprax.assay.Assay;
-import org.exoprax.assay.AssayOutput;
-
-/**
+/*
  * Copyright 2006-2010 Gregor N. Purdy, Sr.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +14,19 @@ import org.exoprax.assay.AssayOutput;
  * limitations under the License.
  *
  */
+
+package org.exoprax.assay.output;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang.StringEscapeUtilsPatched;
+import org.apache.commons.lang.StringUtils;
+import org.exoprax.assay.Assay;
+import org.exoprax.assay.AssayOutput;
+
 public class ConsoleOutput implements AssayOutput {
 
     private static class StringComparator implements Comparator<String> {

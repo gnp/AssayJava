@@ -1,11 +1,4 @@
-package org.exoprax.assay;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-/**
+/*
  * Copyright 2006-2010 Gregor N. Purdy, Sr.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +13,33 @@ import java.util.regex.Pattern;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
+ */
+
+package org.exoprax.assay;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * <p>
+ * To perform a data assay, you create an instance of this class and push attribute definitions
+ * at it and observations of attribute values. It builds up a data structure representing the
+ * unique values observed over all records for each attribute, and for each value infers a data
+ * type.
+ * </p>
+ * 
+ * <p>
+ * You can access the results programmatically via the Map returned by getTableAssay(), or you
+ * can use an instance of a class that implements the AssayOutput interface to format a report
+ * for you.
+ * </p>
+ * 
+ * @see Assayer for a class that coordinates an AssayInput, AssayOutput and Assay
+ * @see AssayerRunner for a class that runs an Assayer in a separate thread
+ * 
+ * @author Gregor N. Purdy, Sr.
  */
 public class Assay {
 
@@ -48,17 +68,17 @@ public class Assay {
      * TODO: Lots of other formats, including ones that aren't all numeric (including time zones, too)
      */
     public final static Pattern timestampPattern = Pattern
-            .compile("^\\s*[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]\\s*$");
+            .compile("^\\s*[0-9]{4}-[0-9]{2}-[0-9]{2}\\s+[0-9]{2}:[0-9]{2}:[0-9]{2}[.][0-9]{3}\\s*$");
 
     public final static Pattern ssnPattern = Pattern.compile("^\\s*([0-9]{3}-[0-9]{2}-[0-9]{4})\\s*$");
 
     public final static Pattern einPattern = Pattern.compile("^\\s*([0-9]{2}-[0-9]{7})\\s*$");
 
-    public final static Pattern telephonePattern = Pattern.compile("^\\s*([0-9]{3}-[0-9]{3}-[0-9]{4})\\s*$");
+    public final static Pattern telephonePattern = Pattern.compile("^\\s*([0-9]{3}[.-][0-9]{3}[.-][0-9]{4})\\s*$");
 
     public final static Pattern zipPattern = Pattern.compile("^\\s*([0-9]{5}-[0-9]{4})\\s*$");
 
-    public final static Pattern telephone2Pattern = Pattern.compile("^\\s*(\\([0-9]{3}\\)[0-9]{3}-[0-9]{4})\\s*$");
+    public final static Pattern telephone2Pattern = Pattern.compile("^\\s*([(][0-9]{3}[)]\\s*[0-9]{3}[.-][0-9]{4})\\s*$");
 
     public final static Pattern truePattern = Pattern.compile("^(true|t|yes|y)$", Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
     
@@ -165,7 +185,19 @@ public class Assay {
             final Matcher telephoneMatcher = telephonePattern.matcher(value);
 
             if (telephoneMatcher.matches()) {
-                return "TELEPHONE('999-999-9999')";
+                final String temp = zonedMatcher.group(1);
+                final String format = singleDigitPattern.matcher(temp).replaceAll("9");
+                
+                return "TELEPHONE('" + format + "')";
+            }
+
+            final Matcher telephone2Matcher = telephone2Pattern.matcher(value);
+
+            if (telephone2Matcher.matches()) {
+                final String temp = zonedMatcher.group(1);
+                final String format = singleDigitPattern.matcher(temp).replaceAll("9");
+                
+                return "TELEPHONE('" + format + "')";
             }
 
             final Matcher zipMatcher = zipPattern.matcher(value);
@@ -179,12 +211,6 @@ public class Assay {
             final String format = singleDigitPattern.matcher(temp).replaceAll("9");
 
             return "ZONED('" + format + "')";
-        }
-
-        final Matcher telephone2Matcher = telephone2Pattern.matcher(value);
-
-        if (telephone2Matcher.matches()) {
-            return "TELEPHONE('(999)999-9999')";
         }
 
         final Matcher trueMatcher = truePattern.matcher(value);

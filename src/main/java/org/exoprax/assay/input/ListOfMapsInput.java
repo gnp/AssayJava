@@ -1,12 +1,4 @@
-package org.exoprax.assay.input;
-
-import java.util.List;
-import java.util.Map;
-
-import org.exoprax.assay.Assay;
-import org.exoprax.assay.AssayInput;
-
-/**
+/*
  * Copyright 2006-2010 Gregor N. Purdy, Sr.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +14,15 @@ import org.exoprax.assay.AssayInput;
  * limitations under the License.
  *
  */
+
+package org.exoprax.assay.input;
+
+import java.util.List;
+import java.util.Map;
+
+import org.exoprax.assay.Assay;
+import org.exoprax.assay.AssayInput;
+
 public class ListOfMapsInput implements AssayInput {
 	
     private Assay assay;

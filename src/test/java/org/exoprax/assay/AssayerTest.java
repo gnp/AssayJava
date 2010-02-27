@@ -1,8 +1,4 @@
-package org.exoprax.assay;
-
-import junit.framework.TestCase;
-
-/**
+/*
  * Copyright 2006-2010 Gregor N. Purdy, Sr.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +14,11 @@ import junit.framework.TestCase;
  * limitations under the License.
  *
  */
+
+package org.exoprax.assay;
+
+import junit.framework.TestCase;
+
 public class AssayerTest extends TestCase {
 
 	public void testBadArgs() {

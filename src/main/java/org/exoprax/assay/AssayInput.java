@@ -1,6 +1,4 @@
-package org.exoprax.assay;
-
-/**
+/*
  * Copyright 2006-2010 Gregor N. Purdy, Sr.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +14,9 @@ package org.exoprax.assay;
  * limitations under the License.
  *
  */
+
+package org.exoprax.assay;
+
 public interface AssayInput extends Runnable {
 
     public void setAssay(Assay assay);
