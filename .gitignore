@@ -2,4 +2,5 @@
 .metadata
 .project
 .settings
+cobertura.ser
 target

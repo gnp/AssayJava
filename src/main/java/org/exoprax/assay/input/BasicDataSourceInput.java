@@ -48,6 +48,10 @@ public class BasicDataSourceInput implements AssayInput {
 
     private long rowLimit = 0;
 
+    public BasicDataSourceInput() {
+    	super();
+    }
+    
     public Assay getAssay() {
         return this.assay;
     }

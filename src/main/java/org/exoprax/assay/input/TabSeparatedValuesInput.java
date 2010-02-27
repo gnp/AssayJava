@@ -28,6 +28,10 @@ public class TabSeparatedValuesInput implements AssayInput {
     
     private BufferedReader bufferedReader;
 
+    public TabSeparatedValuesInput() {
+    	super();
+    }
+    
 	public void setBufferedReader(final BufferedReader bufferedReader) {
 		this.bufferedReader = bufferedReader;
 	}
