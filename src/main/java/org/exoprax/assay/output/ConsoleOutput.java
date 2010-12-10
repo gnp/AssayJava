@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang.StringEscapeUtilsPatched;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.exoprax.assay.Assay;
 import org.exoprax.assay.AssayOutput;
@@ -117,7 +117,7 @@ public class ConsoleOutput implements AssayOutput {
                     Collections.sort(valueList, stringComparator);
 
                     for (final String actualValue : valueList) {
-                        final String escapedValue = StringEscapeUtilsPatched.escapeJava(actualValue);
+                        final String escapedValue = StringEscapeUtils.escapeJava(actualValue);
 
                         distinctCount++;
 
