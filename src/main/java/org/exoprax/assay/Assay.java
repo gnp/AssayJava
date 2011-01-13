@@ -304,7 +304,7 @@ public class Assay {
         final Long valueCount = valueAssay.get(value);
         final long temp = valueCount == null ? 0 : valueCount.longValue();
 
-        valueAssay.put(value, new Long(temp + 1));
+        valueAssay.put(value, Long.valueOf(temp + 1));
     }
 
     public Map<String, String> getColumnTypes() {
