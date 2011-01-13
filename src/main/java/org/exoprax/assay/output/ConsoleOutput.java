@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2010 Gregor N. Purdy, Sr.
+ * Copyright 2006-2011 Gregor N. Purdy, Sr.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ public class ConsoleOutput implements AssayOutput {
 
     private int showValuesLimit = 20;
 
-    private static StringComparator stringComparator = new StringComparator();
+    private static final StringComparator stringComparator = new StringComparator();
 
     public ConsoleOutput() {
         super();
