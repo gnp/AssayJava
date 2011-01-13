@@ -44,10 +44,10 @@ public class TabSeparatedValuesInput implements AssayInput {
 	public void run() {
 		try {
 			final String [] columnNames = bufferedReader.readLine().split("\t");
-			
-			for (int i = 0; i < columnNames.length; ++i) {
-				assay.addAttribute(columnNames[i], "TEXT");
-			}
+
+            for (final String columnName : columnNames) {
+                assay.addAttribute(columnName, "TEXT");
+            }
 			
 			while (true) {
 				final String line = bufferedReader.readLine();
