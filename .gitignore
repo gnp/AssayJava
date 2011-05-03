@@ -1,6 +1,8 @@
 .classpath
+.idea
 .metadata
 .project
 .settings
 cobertura.ser
 target
+AssayJava.iml

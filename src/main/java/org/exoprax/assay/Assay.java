@@ -104,6 +104,10 @@ public class Assay {
     /**
      * TODO: What about multiline? Do our patterns work right? Should we have a "TEXT()" type for cases where the value is
      * multiline, but otherwise all printable characters and normal whitespace?
+     *
+     * @param value The value to classify.
+     *
+     * @return A String representing the most specific classification for value.
      */
     public static String classify(final String value) {
         if (value == null) {
@@ -304,7 +308,7 @@ public class Assay {
         final Long valueCount = valueAssay.get(value);
         final long temp = valueCount == null ? 0 : valueCount.longValue();
 
-        valueAssay.put(value, new Long(temp + 1));
+        valueAssay.put(value, Long.valueOf(temp + 1));
     }
 
     public Map<String, String> getColumnTypes() {
