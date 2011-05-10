@@ -13,17 +13,18 @@ Here's a simple example code fragment from one of the unit tests. It sets up an
 input source to read from a tab-separated values text stream and outputs the assay
 results to the console:
 
-    final FileInputStream fis = new FileInputStream("src/test/data/ucrcfullcatalogue_13Jan09.txt.gz");
-    final GZIPInputStream gis = new GZIPInputStream(fis);
-    final InputStreamReader r = new InputStreamReader(gis);
-    final BufferedReader br = new BufferedReader(r);
-    final TabSeparatedValuesInput i = new TabSeparatedValuesInput();
-    i.setBufferedReader(br);
+```java
+final FileInputStream fis = new FileInputStream("src/test/data/ucrcfullcatalogue_13Jan09.txt.gz");
+final GZIPInputStream gis = new GZIPInputStream(fis);
+final InputStreamReader r = new InputStreamReader(gis);
+final BufferedReader br = new BufferedReader(r);
+final TabSeparatedValuesInput i = new TabSeparatedValuesInput();
+i.setBufferedReader(br);
     
-    final ConsoleOutput o = new ConsoleOutput();
+final ConsoleOutput o = new ConsoleOutput();
     
-    final Assayer assayer = new Assayer();
-    assayer.setInput(i);
-    assayer.setOutput(o);
-    assayer.run();
-
+final Assayer assayer = new Assayer();
+assayer.setInput(i);
+assayer.setOutput(o);
+assayer.run();
+```
