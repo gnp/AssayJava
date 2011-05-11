@@ -5,9 +5,9 @@ or flat files or other data sources to help you understand the variability of th
 data.
 
 I have used this to validate what people told me about what was *supposedly* in the
-data set they were going to have me depend on. I would get the data file from them
-and run this and then ask them all the follow up questions like "wait, what does
-it mean when the order_date field contains the text 'X' instead of a date?".
+data set they were going to have me depend on. I would get the data file from them,
+run an assay and then ask them all the follow up questions like "wait, what does
+it mean when the `order_date` field contains the text '`X`' instead of a date?".
 
 Here's a simple example code fragment from one of the unit tests. It sets up an
 input source to read from a tab-separated values text stream and outputs the assay
