@@ -1,15 +1,15 @@
 # README
 
-AssayJava contains code you can use to perform "assays" of data sets from databases
+AssayJava contains code you can use to perform &ldquo;assays&rdquo; of data sets from databases
 or flat files or other data sources to help you understand the variability of the
 data.
 
 I have used this to validate what people told me about what was *supposedly* in the
 data set they were going to have me depend on. I would get the data file from them,
-run an assay and then ask them all the follow up questions like "wait, what does
-it mean when the `order_date` field contains the text '`X`' instead of a date?".
+run an assay and then ask them all the follow up questions like &ldquo;wait, what does
+it mean when the `order_date` field contains the text &lsquo;`X`&rsquo; instead of a date?&rdquo;
 
-Here's a simple example code fragment from one of the unit tests. It sets up an
+Here&rsquo;s a simple example code fragment from one of the unit tests. It sets up an
 input source to read from a tab-separated values text stream and outputs the assay
 results to the console:
 
